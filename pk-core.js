@@ -99,7 +99,7 @@ function render(ctx,t,opts={}) {
  }else if(state.status==='loading'&&state.listeners?.length<70){
    if(!state.listeners)state.listeners=[];
    const canvasRef=ctx.canvas;
-   state.listeners.push(()=>{if(canvasRef.isConnected)render(ctx,t,opts)});
+   state.listeners.push(()=>{if(canvasRef.isConnected){if(typeof opts.onReady==='function')opts.onReady();else render(ctx,t,opts)}});
  }
  // Distinct editorial compositions: each design changes typography, placement and framing.
  const style=variant%8;
