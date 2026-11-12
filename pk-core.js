@@ -45,15 +45,59 @@ function render(ctx,t,opts={}) {
  }else if(theme==='Business'){
    ctx.fillStyle='#ffffff17';for(let i=0;i<5;i++){round(ctx,110+i*50,220+i*48,860-i*100,550-i*90,25);ctx.fill()}for(let i=0;i<7;i++)star(130+i*135,230,16,'#ffe3ac');
  }
- // Premium card framing and typography.
- ctx.save();ctx.strokeStyle='#ffffff88';ctx.lineWidth=4;round(ctx,43,48,994,1254,34);ctx.stroke();ctx.strokeStyle='#ffebbd88';ctx.lineWidth=2;round(ctx,58,64,964,1223,26);ctx.stroke();ctx.restore();
- ctx.textAlign='center';ctx.textBaseline='middle';
- const panel=ctx.createLinearGradient(0,650,0,1170);panel.addColorStop(0,'#130d2900');panel.addColorStop(.3,'#1c113fa8');panel.addColorStop(1,'#1c113fdd');ctx.fillStyle=panel;round(ctx,86,610,908,570,36);ctx.fill();
- ctx.fillStyle='#ffe9b3';ctx.font='bold 26px sans-serif';ctx.fillText('✦  POSTER KING COLLECTION  ✦',540,672);
- ctx.fillStyle='#fff';ctx.shadowColor='#160c30a0';ctx.shadowBlur=12;ctx.font='bold 80px "Noto Sans Gujarati","Noto Sans Devanagari",sans-serif';wrap(ctx,t.title,540,805,840,94,2);ctx.shadowBlur=0;
- ctx.fillStyle='#ffefd3';ctx.font='bold 43px "Noto Sans Gujarati","Noto Sans Devanagari",sans-serif';wrap(ctx,t.subtitle,540,985,830,62,3);
- if(t.photoSlot){ctx.save();ctx.strokeStyle='#ffffffc0';ctx.setLineDash([12,9]);ctx.lineWidth=5;ctx.beginPath();ctx.arc(540,1200,63,0,Math.PI*2);ctx.stroke();ctx.restore();ctx.font='19px sans-serif';ctx.fillStyle='#ffffffc9';ctx.fillText('ADD PHOTO',540,1200)}
- ctx.fillStyle='#fff';round(ctx,778,1268,282,56,12);ctx.fill();ctx.fillStyle='#542191';ctx.font='bold 28px sans-serif';ctx.fillText('👑 Poster King',919,1297);
+ // Distinct editorial compositions: each design changes typography, placement and framing.
+ const style=variant%8;
+ ctx.textBaseline='middle';
+ const font='"Noto Sans Gujarati","Noto Sans Devanagari",sans-serif';
+ const paintText=(str,x,y,max,size,color,align='center',leading=1.18)=>{
+   ctx.textAlign=align;ctx.fillStyle=color;ctx.font='800 '+size+'px '+font;
+   ctx.shadowColor='#140e2850';ctx.shadowBlur=8;
+   wrap(ctx,str,x,y,max,size*leading,3);ctx.shadowBlur=0;
+ };
+ const accent=['#ffe7a6','#ffe0bd','#f7f3e8','#ffd9e8'][variant%4];
+ const glass=(x,y,w,h,alpha=.77)=>{ctx.fillStyle='rgba(19,13,42,'+alpha+')';round(ctx,x,y,w,h,28);ctx.fill()};
+ const rule=(x,y,w)=>{ctx.fillStyle=accent;round(ctx,x,y,w,6,3);ctx.fill()};
+ const watermark=()=>{ctx.fillStyle='#fff';round(ctx,782,1270,273,52,10);ctx.fill();ctx.textAlign='center';ctx.fillStyle='#542191';ctx.font='bold 27px sans-serif';ctx.fillText('👑 Poster King',918,1296)};
+ if(style===0){
+   // Full bleed cinematic, title at lower third.
+   const fade=ctx.createLinearGradient(0,560,0,1300);fade.addColorStop(0,'#100a2500');fade.addColorStop(.65,'#120a2dbb');fade.addColorStop(1,'#0e0928f2');ctx.fillStyle=fade;ctx.fillRect(0,550,1080,800);
+   rule(430,835,220);paintText(t.title,540,915,900,95,'#fff');paintText(t.subtitle,540,1100,880,43,'#fff0ce');
+ }else if(style===1){
+   // Editorial ivory paper panel and asymmetric text.
+   ctx.fillStyle='#fff8eb';round(ctx,90,650,900,540,38);ctx.fill();ctx.strokeStyle='#b98b56';ctx.lineWidth=4;round(ctx,111,671,858,498,26);ctx.stroke();
+   ctx.textAlign='left';ctx.fillStyle='#bd8042';ctx.font='bold 26px sans-serif';ctx.fillText('A BEAUTIFUL DAY • 01',160,740);
+   rule(160,790,150);paintText(t.title,160,880,730,86,'#5c2840','left');paintText(t.subtitle,160,1050,740,40,'#634b4b','left');
+ }else if(style===2){
+   // Luxury black and gold framed typography.
+   glass(90,620,900,590,.87);ctx.strokeStyle='#edc77d';ctx.lineWidth=7;round(ctx,110,638,860,555,30);ctx.stroke();ctx.strokeStyle='#edc77d99';ctx.lineWidth=2;round(ctx,126,655,828,522,22);ctx.stroke();
+   flower(540,715,65,'#ffdf9c');paintText(t.title,540,860,780,91,'#ffe3a5');rule(430,964,220);paintText(t.subtitle,540,1040,780,41,'#fff3dc');
+ }else if(style===3){
+   // White botanical magazine typography.
+   ctx.fillStyle='#ffffffef';round(ctx,80,560,920,650,120);ctx.fill();flower(145,625,70,'#ef91b0');flower(915,1135,65,'#e9a1bb');
+   ctx.textAlign='center';ctx.fillStyle='#aa6877';ctx.font='bold 26px sans-serif';ctx.fillText('✦  GOOD THOUGHTS  ✦',540,660);
+   paintText(t.title,540,815,790,101,'#8b2d52');rule(410,925,260);paintText(t.subtitle,540,1020,790,42,'#51454c');
+ }else if(style===4){
+   // Split-color poster with bold modern typographic block.
+   ctx.fillStyle='#ffffffec';ctx.beginPath();ctx.moveTo(0,685);ctx.lineTo(1080,540);ctx.lineTo(1080,1350);ctx.lineTo(0,1350);ctx.fill();
+   ctx.fillStyle=t.colors[1];round(ctx,85,760,910,140,18);ctx.fill();paintText(t.title,540,830,840,83,'#fff');
+   rule(425,955,230);paintText(t.subtitle,540,1055,810,44,'#4c2d43');
+ }else if(style===5){
+   // Centered circular halo and clean text.
+   ctx.fillStyle='#fff6e6f2';ctx.beginPath();ctx.ellipse(540,930,465,335,0,0,Math.PI*2);ctx.fill();ctx.strokeStyle='#cfab72';ctx.lineWidth=8;ctx.beginPath();ctx.ellipse(540,930,438,307,0,0,Math.PI*2);ctx.stroke();
+   paintText(t.title,540,845,770,90,'#653e4c');rule(440,945,200);paintText(t.subtitle,540,1020,770,40,'#66504e');
+ }else if(style===6){
+   // Narrow centered luxury ribbon with airy spacing.
+   ctx.fillStyle='#241536e3';round(ctx,160,660,760,515,8);ctx.fill();ctx.fillStyle='#d9b875';ctx.fillRect(160,660,760,14);ctx.fillRect(160,1161,760,14);
+   ctx.textAlign='center';ctx.fillStyle='#ffe7a6';ctx.font='bold 30px sans-serif';ctx.fillText('✦   SPECIAL WISHES   ✦',540,725);
+   paintText(t.title,540,855,690,91,'#fff');paintText(t.subtitle,540,1040,690,42,'#f6e3c5');
+ }else{
+   // Soft translucent floating card, floral corner details.
+   ctx.fillStyle='#ffffffdf';round(ctx,65,590,950,620,36);ctx.fill();ctx.fillStyle=t.colors[1]+'44';round(ctx,90,615,900,570,22);ctx.fill();
+   flower(120,655,65,'#f7d5b3');flower(950,1130,85,'#f7d5b3');ctx.strokeStyle='#b78957';ctx.lineWidth=4;round(ctx,106,628,868,545,18);ctx.stroke();
+   paintText(t.title,540,835,770,92,'#642d4d');rule(430,940,220);paintText(t.subtitle,540,1045,780,41,'#4c3342');
+ }
+ watermark();
+
  ctx.restore();
 }
 function canvas(t){const c=document.createElement('canvas');c.width=1080;c.height=1350;render(c.getContext('2d'),t);return c}function imageURL(t){return canvas(t).toDataURL('image/png')}function download(c,name){const a=document.createElement('a');a.download=name||'poster-king.png';a.href=c.toDataURL('image/png');document.body.appendChild(a);a.click();a.remove()}async function share(c,name){const blob=await new Promise(r=>c.toBlob(r,'image/png'));if(!blob)return;const file=new File([blob],name||'poster-king.png',{type:'image/png'});if(navigator.canShare?.({files:[file]})){try{await navigator.share({files:[file],title:'Poster King'})}catch(e){if(e.name!=='AbortError')throw e}}else download(c,name)}
