@@ -45,6 +45,30 @@ function render(ctx,t,opts={}) {
  }else if(theme==='Business'){
    ctx.fillStyle='#ffffff17';for(let i=0;i<5;i++){round(ctx,110+i*50,220+i*48,860-i*100,550-i*90,25);ctx.fill()}for(let i=0;i<7;i++)star(130+i*135,230,16,'#ffe3ac');
  }
+ // Artwork variation layer: distinctive illustrated scenes, not recolored duplicates.
+ const scene=variant%8;
+ if(scene===1){
+   // Botanical bouquet across lower corners.
+   ctx.save();ctx.globalAlpha=.85;for(let i=0;i<13;i++){const a=i*.48;leaf(80+Math.sin(a)*170,790+i*32,55+i%3*12,a);leaf(950-Math.sin(a)*160,770+i*34,58+i%3*9,-a);if(i%3===0){flower(130+i*17,720+i*34,55,'#ffbfd1');flower(900-i*13,735+i*36,44,'#f9dfb4')}}ctx.restore();
+ }else if(scene===2){
+   // Fine-art golden rays and starbursts.
+   ctx.save();ctx.translate(540,390);ctx.strokeStyle='#ffe5a677';for(let i=0;i<44;i++){const a=i*Math.PI/22;line(Math.cos(a)*170,Math.sin(a)*170,Math.cos(a)*550,Math.sin(a)*550,'#ffe5a655',4)}ctx.restore();for(let i=0;i<12;i++)star((i*193)%1080,(i*131)%750,15+i%3*9,'#fff0bf');
+ }else if(scene===3){
+   // Delicate garden trellis.
+   ctx.save();ctx.globalAlpha=.8;for(let i=0;i<11;i++){flower((i*147+60)%1060,170+i%3*108,36+i%4*10,['#f9bfd1','#fff0d1','#e8c8ff'][i%3]);leaf((i*109+75)%1000,150+i%4*96,65,i*.7)}ctx.restore();
+ }else if(scene===4){
+   // Architectural arches, premium heritage aesthetic.
+   ctx.save();ctx.strokeStyle='#ffe6b788';ctx.lineWidth=13;for(let i=0;i<4;i++){ctx.beginPath();ctx.moveTo(80+i*38,620);ctx.lineTo(80+i*38,260);ctx.quadraticCurveTo(540,40+i*35,1000-i*38,260);ctx.lineTo(1000-i*38,620);ctx.stroke()}ctx.restore();
+ }else if(scene===5){
+   // Decorative water ripples and lotus petals.
+   ctx.save();for(let i=0;i<7;i++){ctx.strokeStyle='#f6dfbd77';ctx.lineWidth=5;ctx.beginPath();ctx.ellipse(540,540,170+i*85,25+i*19,0,0,Math.PI*2);ctx.stroke()}for(let i=0;i<9;i++)flower(150+i*96,670+i%2*38,32,'#f5c4d3');ctx.restore();
+ }else if(scene===6){
+   // Vintage geometric luxury mosaic.
+   ctx.save();ctx.globalAlpha=.32;for(let row=0;row<5;row++)for(let col=0;col<6;col++){const x=col*220+(row%2?100:0),y=row*170+45;ctx.strokeStyle='#ffefc7';ctx.lineWidth=3;ctx.strokeRect(x,y,125,125);star(x+62,y+62,38,'#ffe8a0')}ctx.restore();
+ }else if(scene===7){
+   // Autumn bokeh and layered leaves.
+   ctx.save();for(let i=0;i<28;i++){const x=(i*173+variant*23)%1080,y=(i*107)%780;circle(x,y,18+i%5*14,['#ffe6ae50','#f3a7c455','#ffffff55'][i%3]);if(i%2===0)leaf(x,y,50+i%3*20,i*.43)}ctx.restore();
+ }
  // Distinct editorial compositions: each design changes typography, placement and framing.
  const style=variant%8;
  ctx.textBaseline='middle';
