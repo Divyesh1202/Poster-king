@@ -1,0 +1,16 @@
+{
+  "name": "Poster King",
+  "short_name": "Poster King",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#f5f2fc",
+  "theme_color": "#5014ae",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
