@@ -69,6 +69,10 @@ function render(ctx,t,opts={}) {
    // Autumn bokeh and layered leaves.
    ctx.save();for(let i=0;i<28;i++){const x=(i*173+variant*23)%1080,y=(i*107)%780;circle(x,y,18+i%5*14,['#ffe6ae50','#f3a7c455','#ffffff55'][i%3]);if(i%2===0)leaf(x,y,50+i%3*20,i*.43)}ctx.restore();
  }
+ // Original AI starter artwork: local assets are preferred over third-party photos.
+ const originalArtwork={Morning:'good_morning_sunrise_artwork.webp',Afternoon:'floral_wishes_artwork.webp',Evening:'lotus_suvichar_artwork.webp',Suvichar:'lotus_suvichar_artwork.webp',Diwali:'diwali_royal_artwork.webp',Birthday:'floral_wishes_artwork.webp',Anniversary:'floral_wishes_artwork.webp'};
+ const originalFile=originalArtwork[t.category];
+ const originalUrl=originalFile&&variant%4===0?'./assets/premium/'+originalFile:null;
  // Curated Pexels photography: licensed photo backgrounds with editable typography.
  const photos={
  Morning:[33361361,26018022,31469976,27163261,34585923,17144513],
@@ -87,7 +91,7 @@ function render(ctx,t,opts={}) {
  Business:[33361361,34585923]
  };
  const ids=photos[t.category]||photos.Morning;
- const photoId=ids[variant%ids.length],url='https://images.pexels.com/photos/'+photoId+'/pexels-photo-'+photoId+'.jpeg?auto=compress&cs=tinysrgb&w=1080';
+ const photoId=ids[variant%ids.length],url=originalUrl||'https://images.pexels.com/photos/'+photoId+'/pexels-photo-'+photoId+'.jpeg?auto=compress&cs=tinysrgb&w=1080';
  if(!render.photoCache)render.photoCache=new Map();
  let state=render.photoCache.get(url);
  if(!state){const img=new Image();img.crossOrigin='anonymous';state={img,status:'loading'};render.photoCache.set(url,state);img.onload=()=>{state.status='ready';for(const listener of state.listeners||[])listener();state.listeners=[]};img.onerror=()=>{state.status='failed';state.listeners=[]};img.src=url}
