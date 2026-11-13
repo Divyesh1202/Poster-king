@@ -86,11 +86,14 @@ function render(ctx,t,opts={}) {
  Holi:['floral-wishes.svg','lotus-lake.svg'],
  Business:['floral-wishes.svg','morning-garden.svg']
  };
+ const realArtwork={Morning:['morning-photoreal.webp','morning-garden-real.webp'],Afternoon:['morning-garden-real.webp'],Evening:['morning-photoreal.webp'],Suvichar:['morning-garden-real.webp'],Diwali:['diwali-photoreal.webp','diwali-royal-real.webp'],Navratri:['diwali-royal-real.webp']};
  const files=originalArtwork[t.category]||originalArtwork.Morning;
- const url='./assets/premium/'+files[variant%files.length];
+ const realFiles=realArtwork[t.category];
+ const fallbackUrl='./assets/premium/'+files[variant%files.length];
+ const url=realFiles?'./assets/premium/'+realFiles[variant%realFiles.length]:fallbackUrl;
  if(!render.photoCache)render.photoCache=new Map();
  let state=render.photoCache.get(url);
- if(!state){const img=new Image();img.crossOrigin='anonymous';state={img,status:'loading'};render.photoCache.set(url,state);img.onload=()=>{state.status='ready';for(const listener of state.listeners||[])listener();state.listeners=[]};img.onerror=()=>{state.status='failed';state.listeners=[]};img.src=url}
+ if(!state){const img=new Image();img.crossOrigin='anonymous';state={img,status:'loading'};render.photoCache.set(url,state);img.onload=()=>{state.status='ready';for(const listener of state.listeners||[])listener();state.listeners=[]};img.onerror=()=>{if(url!==fallbackUrl){img.onerror=()=>{state.status='failed';state.listeners=[]};img.src=fallbackUrl}else{state.status='failed';state.listeners=[]}};img.src=url}
  if(state.status==='ready'){
   const im=state.img;
   ctx.save();ctx.drawImage(im,0,0,1080,1350);
