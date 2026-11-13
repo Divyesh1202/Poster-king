@@ -70,36 +70,31 @@ function render(ctx,t,opts={}) {
    ctx.save();for(let i=0;i<28;i++){const x=(i*173+variant*23)%1080,y=(i*107)%780;circle(x,y,18+i%5*14,['#ffe6ae50','#f3a7c455','#ffffff55'][i%3]);if(i%2===0)leaf(x,y,50+i%3*20,i*.43)}ctx.restore();
  }
  // Original AI starter artwork: local assets are preferred over third-party photos.
- const originalArtwork={Morning:'good_morning_sunrise_artwork.webp',Afternoon:'floral_wishes_artwork.webp',Evening:'lotus_suvichar_artwork.webp',Suvichar:'lotus_suvichar_artwork.webp',Diwali:'diwali_royal_artwork.webp',Birthday:'floral_wishes_artwork.webp',Anniversary:'floral_wishes_artwork.webp'};
- const originalFile=originalArtwork[t.category];
- const originalUrl=originalFile&&variant%4===0?'./assets/premium/'+originalFile:null;
- // Curated Pexels photography: licensed photo backgrounds with editable typography.
- const photos={
- Morning:[33361361,26018022,31469976,27163261,34585923,17144513],
- Afternoon:[26018022,31469976,13532886],
- Evening:[34585923,31469976,17144513],
- Night:[13651742,1936752],
- Suvichar:[17144513,26018022,33361361,27163261],
- Diwali:[34387785,34431721,5861723,6325216],
- Navratri:[18849427,34387786],
- Janmashtami:[17144513,33361361],
- Devotional:[34387786,17144513],
- Birthday:[32798141,20448691,30692825],
- Anniversary:[26018022,27163261],
- 'New Year':[32798141,34387785],
- Holi:[26018022,17144513],
- Business:[33361361,34585923]
+ const originalArtwork={
+ Morning:['morning-garden.svg','floral-wishes.svg','lotus-lake.svg'],
+ Afternoon:['floral-wishes.svg','morning-garden.svg'],
+ Evening:['lotus-lake.svg','morning-garden.svg'],
+ Night:['lotus-lake.svg','floral-wishes.svg'],
+ Suvichar:['lotus-lake.svg','floral-wishes.svg','morning-garden.svg'],
+ Diwali:['diwali-royal.svg'],
+ Navratri:['diwali-royal.svg','floral-wishes.svg'],
+ Janmashtami:['lotus-lake.svg','morning-garden.svg'],
+ Devotional:['lotus-lake.svg','diwali-royal.svg'],
+ Birthday:['floral-wishes.svg','morning-garden.svg'],
+ Anniversary:['floral-wishes.svg','lotus-lake.svg'],
+ 'New Year':['diwali-royal.svg','morning-garden.svg'],
+ Holi:['floral-wishes.svg','lotus-lake.svg'],
+ Business:['floral-wishes.svg','morning-garden.svg']
  };
- const ids=photos[t.category]||photos.Morning;
- const photoId=ids[variant%ids.length],url=originalUrl||'https://images.pexels.com/photos/'+photoId+'/pexels-photo-'+photoId+'.jpeg?auto=compress&cs=tinysrgb&w=1080';
+ const files=originalArtwork[t.category]||originalArtwork.Morning;
+ const url='./assets/premium/'+files[variant%files.length];
  if(!render.photoCache)render.photoCache=new Map();
  let state=render.photoCache.get(url);
  if(!state){const img=new Image();img.crossOrigin='anonymous';state={img,status:'loading'};render.photoCache.set(url,state);img.onload=()=>{state.status='ready';for(const listener of state.listeners||[])listener();state.listeners=[]};img.onerror=()=>{state.status='failed';state.listeners=[]};img.src=url}
  if(state.status==='ready'){
-  const im=state.img,scale=Math.max(1080/im.width,770/im.height),sw=1080/scale,sh=770/scale;
-  const offX=(im.width-sw)/2,offY=(im.height-sh)/2;
-  ctx.save();ctx.drawImage(im,offX,offY,sw,sh,0,0,1080,770);
-  const veil=ctx.createLinearGradient(0,500,0,850);veil.addColorStop(0,'#120c2600');veil.addColorStop(1,'#120c26f0');ctx.fillStyle=veil;ctx.fillRect(0,500,1080,350);ctx.restore();
+  const im=state.img;
+  ctx.save();ctx.drawImage(im,0,0,1080,1350);
+  const veil=ctx.createLinearGradient(0,550,0,1350);veil.addColorStop(0,'#120c2600');veil.addColorStop(1,'#120c26aa');ctx.fillStyle=veil;ctx.fillRect(0,550,1080,800);ctx.restore();
  }else if(state.status==='loading'&&state.listeners?.length<70){
    if(!state.listeners)state.listeners=[];
    const canvasRef=ctx.canvas;
